@@ -1,71 +1,44 @@
-var ans = "";
+var result = "";
 var clear = false;
 var calc = "";
-var buttons = ["AC", "CE", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", ".", "0", "And", "="];
+var buttons = ["AC", "CE", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", ".", "0", "Last", "="];
 $(function() {
-	var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
-
-function responsiveHeight() {
-    if (isMobile.any()) {
-        return screen.height;
-    } else {
-        return $(window).height();
-    }
-}
-
+	
 for (var i = 0; i < buttons.length; i++) {
 	var btn = buttons[i];
 	$(".buttons").append('<button class="button" value="' + btn + '">' + btn + '</button>');
 }
-$("body").css("max-height", responsiveHeight());
+$("body").css("max-height", $(window).height() + "px");
 $(window).resize(function() {
-	$("body").css("max-height", responsiveHeight());
+	$("body").css("max-height", screen.height + "px");
 });
 
 
 });
 $(document).ready(function() {
   $("button").click(function() {
-    var text = $(this).attr("value");
-    if(parseInt(text, 10) == text || text === "." || text === "/" || text === "*" || text === "-" || text === "+" || text === "%") {
+    var value = $(this).attr("value");
+    var box = $(".answer");
+    if(parseInt(value, 10) == value || value === buttons[2] || value === buttons[3]|| value === buttons[7] || value === buttons[11] || value === buttons[15] || value === buttons[16]) {
       if(clear === false) {
-        calc += text;
-        $(".textbox").val(calc);
+        calc += value;
+        box.val(calc);
       } else {
-        calc = text;
-        $(".textbox").val(calc);
+        calc = value;
+        box.val(calc);
         clear = false;
       }
-    } else if(text === "AC") {
+    } else if(value === buttons[0]) {
       calc = "";
-      $(".textbox").val("");
-    } else if(text === "CE") {
+      box.val(calc);
+    } else if(value === buttons[1]) {
       calc = calc.slice(0, -1);
-      $(".textbox").val(calc);
-    } else if(text === "=") {
-      ans = eval(calc);
-      $(".textbox").val(ans);
-      $( "button:contains('And')" ).val(ans);
-      clear = true;
+      box.val(calc);
+    } else if(value === buttons[19]) {
+      result = eval(calc);     
+      $( "button:contains('Last')" ).val(result);
+      calc = result;
+      box.val(calc);
     }
   });
 });
